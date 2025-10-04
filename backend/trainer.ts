@@ -1,4 +1,4 @@
-import sql from './db.js';
+import sql from './db.ts';
 import type { Trainer } from './types.ts';
 
 export const getAllTrainers = async (): Promise<Trainer[]> => {
@@ -15,13 +15,13 @@ export const getTrainerById = async (trainerId: string): Promise<Trainer | null>
     return trainers[0] || null;
 };
 
-export const createTrainer = async (name: string, age: number, country: string): Promise<Trainer> => {
+export const createTrainer = async (name: string, age: number, country: string): Promise<Trainer | null> => {
     const [trainer] = await sql<Trainer[]>`
         INSERT INTO Trainer
         VALUES (${name}, ${age}, ${country})
         RETURNING *
     `;
-    return trainer;
+    return trainer ?? null;
 };
 
 export const deleteTrainer = async (trainerId: string): Promise<void> => {
