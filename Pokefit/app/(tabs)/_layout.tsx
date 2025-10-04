@@ -50,6 +50,15 @@ export default function TabLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen
+                name="pack-opening"
+                options={{
+                    title: "Open Packs!",
+                    tabBarIcon: ({ color }) => (
+                        <IconSymbol size={28} name="square.stack.3d.down.right" color={color} />
+                    ),
+                }}
+            />
         </Tabs>
     );
 }

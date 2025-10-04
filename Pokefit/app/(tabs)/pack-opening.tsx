@@ -7,7 +7,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Fonts } from "@/constants/theme";
 
 // MVP placeholder: swap in real data later (Supabase + Pokémon TCG API)
-export default function PurchaseScreen() {
+export default function PackOpeningScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -25,17 +25,19 @@ export default function PurchaseScreen() {
           type="title"
           style={{ fontFamily: Fonts.rounded }}
         >
-          Pack Store
+          Pack Openings
         </ThemedText>
       </ThemedView>
 
       <ThemedText>
-        Purchase packs here.
+        Open packs you have opened here.
       </ThemedText>
 
       <Collapsible title="TBD">
         <ThemedText>
-          • List of available packs
+          • Select what pack you want to open{"\n"}
+          • Quantity owned{"\n"}
+          • How many packs to open{"\n"}
         </ThemedText>
       </Collapsible>
     </ParallaxScrollView>
