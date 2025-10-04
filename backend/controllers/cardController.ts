@@ -1,17 +1,19 @@
 import express from "express";
-import { setCards } from "../models/card.ts";
+import { drawCardsFromSet } from "../models/card.ts";
 
 const router = express.Router();
 
 router.get("/:setId", (req, res) => {
     const { setId } = req.params;
-    const cards = setCards[setId];
 
-    if (!cards || !cards.length) {
-        return res.status(404).json({ error: "No cards available" });
+    if (!setId) {
+        return res.status(400).json({ error: "Set ID is required" });
     }
-    const randomCard = cards[Math.floor(Math.random() * cards.length)];
-    res.json(randomCard);
+
+    const qty = parseInt(req.query.qty as string) || 1;
+
+    const randomCards = drawCardsFromSet(setId, qty);
+    res.json(randomCards);
 });
 
 export default router;
