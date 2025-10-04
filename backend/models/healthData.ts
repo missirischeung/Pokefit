@@ -1,9 +1,6 @@
 import sql from '../db.ts';
 
-enum MetricType {
-    STEPS = 'STEPS',
-    DISTANCE = 'DISTANCE',
-}
+export type MetricType = 'STEPS' | 'DISTANCE';
 
 type HealthData = {
     TrainerID: string; // UUID

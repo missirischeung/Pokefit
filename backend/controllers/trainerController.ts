@@ -1,5 +1,4 @@
 import * as Trainer from '../models/trainer.ts';
-import type { Trainer as TrainerType } from '../types.ts';
 import express from 'express';
 import type { Request, Response } from 'express';
 
@@ -8,7 +7,7 @@ const router = express.Router();
 // Get all trainers in the root route
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const trainers: TrainerType[] = await Trainer.getAllTrainers();
+    const trainers = await Trainer.getAllTrainers();
     res.json(trainers);
   } catch (error) {
     console.log(error);
@@ -25,7 +24,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 
   try {
-    const trainer: TrainerType | null = await Trainer.getTrainerById(trainerId);
+    const trainer = await Trainer.getTrainerById(trainerId);
     if (trainer) {
       res.json(trainer);
     } else {
@@ -43,7 +42,7 @@ router.post('/', async (req: Request, res: Response) => {
     return res.status(400).send('Missing required fields');
   }
   try {
-    const newTrainer: TrainerType | null = await Trainer.createTrainer(name, age, country);
+    const newTrainer = await Trainer.createTrainer(name, age, country);
     if (newTrainer) {
       res.status(201).json(newTrainer);
     } else {
@@ -79,7 +78,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     return res.status(400).send('Missing required fields');
   }
   try {
-    const updatedTrainer: TrainerType | null = await Trainer.updateTrainer(trainerId, name, age, country);
+    const updatedTrainer = await Trainer.updateTrainer(trainerId, name, age, country);
     if (updatedTrainer) {
       res.json(updatedTrainer);
     } else {
