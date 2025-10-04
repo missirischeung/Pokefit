@@ -17,6 +17,7 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
       }}
     >
+      {/* New MVP tabs */}
       <Tabs.Screen
         name="profile"
         options={{
@@ -24,14 +25,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol
               size={28}
-              name="person.crop.circle.fill"
+              name="square.stack.3d.down.right"
               color={color}
             />
           ),
         }}
       />
-
-      {/* New MVP tabs */}
       <Tabs.Screen
         name="collection"
         options={{
@@ -48,7 +47,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="purchase"
         options={{
-          title: "Purchase",
+          title: "Purchase Packs!",
           tabBarIcon: ({ color }) => (
             <IconSymbol
               size={28}
