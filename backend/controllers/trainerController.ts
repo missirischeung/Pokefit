@@ -1,5 +1,5 @@
-import * as Trainer from './trainer.ts';
-import type { Trainer as TrainerType } from './types.ts';
+import * as Trainer from '../models/trainer.ts';
+import type { Trainer as TrainerType } from '../types.ts';
 import express from 'express';
 import type { Request, Response } from 'express';
 

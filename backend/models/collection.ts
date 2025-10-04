@@ -1,5 +1,5 @@
-import sql from './db.ts';
-import type { Collection } from './types.ts';
+import sql from '../db.ts';
+import type { Collection } from '../types.ts';
 
 // Fetch all collections for a specific user
 export const getCollectionsByTrainerId = async (trainerId: string): Promise<Collection[]> => {

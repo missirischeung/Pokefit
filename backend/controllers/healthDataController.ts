@@ -1,5 +1,5 @@
 import express from 'express';
-import * as HealthData from './healthData.ts';
+import * as HealthData from '../models/healthData.ts';
 import type { Request, Response } from 'express';
 
 const router = express.Router();

@@ -1,5 +1,5 @@
 import express from 'express';
-import * as Collection from './collection.ts';
+import * as Collection from '../models/collection.ts';
 import type { Request, Response } from 'express';
 
 const router = express.Router();

@@ -1,7 +1,7 @@
 import express from 'express';
-import trainerRouter from './trainerController.ts';
-import collectionController from './collectionController.ts';
-import healthDataController from './healthDataController.ts';
+import trainerRouter from './controllers/trainerController.ts';
+import collectionController from './controllers/collectionController.ts';
+import healthDataController from './controllers/healthDataController.ts';
 
 const app = express();
 const port = 3000;
