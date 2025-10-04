@@ -16,12 +16,17 @@ export const getTrainerById = async (trainerId: string): Promise<Trainer | null>
 };
 
 export const createTrainer = async (name: string, age: number, country: string): Promise<Trainer | null> => {
-    const [trainer] = await sql<Trainer[]>`
+    try {
+        const [trainer] = await sql<Trainer[]>`
         INSERT INTO Trainer
         VALUES (${name}, ${age}, ${country})
         RETURNING *
-    `;
-    return trainer ?? null;
+        `;
+        return trainer ?? null;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
 };
 
 export const deleteTrainer = async (trainerId: string): Promise<void> => {
