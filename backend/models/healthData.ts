@@ -1,5 +1,16 @@
 import sql from '../db.ts';
-import type { HealthData, MetricType } from '../types.ts';
+
+enum MetricType {
+    STEPS = 'STEPS',
+    DISTANCE = 'DISTANCE',
+}
+
+type HealthData = {
+    TrainerID: string; // UUID
+    Retrieved: string; // ISO timestamp
+    MetricType: MetricType;
+    Metric: number;
+};
 
 // Fetch all HealthData for a specific user
 export const getHealthDataByTrainerId = async (trainerId: string): Promise<HealthData[]> => {

@@ -1,5 +1,13 @@
 import sql from '../db.ts';
-import type { Trainer } from '../types.ts';
+
+type Trainer = {
+    TrainerID: string; // UUID
+    Name: string;
+    Age: number;
+    Country: string;
+    CreatedAt: string; // ISO timestamp
+    UpdatedAt: string; // ISO timestamp
+};
 
 export const getAllTrainers = async (): Promise<Trainer[]> => {
     const trainers = await sql<Trainer[]>`

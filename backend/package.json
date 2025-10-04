@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
+    "pokemontcgsdk": "^2.0.0",
     "postgres": "^3.4.7"
   },
   "devDependencies": {

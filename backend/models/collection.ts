@@ -1,5 +1,10 @@
 import sql from '../db.ts';
-import type { Collection } from '../types.ts';
+
+type Collection = {
+    TrainerID: string; // UUID
+    CardID: string;
+    AddedAt: string; // ISO timestamp
+};
 
 // Fetch all collections for a specific user
 export const getCollectionsByTrainerId = async (trainerId: string): Promise<Collection[]> => {
