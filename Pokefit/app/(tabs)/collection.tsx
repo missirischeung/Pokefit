@@ -49,7 +49,7 @@ export default function CollectionScreen() {
   }, [query, rarity]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.page} contentContainerStyle={styles.container}>
       {/* Title */}
       <Text style={styles.title}>Pokemon Collection</Text>
 
@@ -213,6 +213,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 12,
     fontWeight: "700",
+  },
+
+  page: {
+    flex: 1,
+    backgroundColor: "#f4f4f4", 
   },
   
   // Empty state
