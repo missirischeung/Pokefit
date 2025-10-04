@@ -65,6 +65,7 @@ export default function ProfileScreen() {
       {/* Profile Image */}
       <Image source={{ uri: trainer.image }} style={styles.image} />
       <Text style={styles.name}>{trainer.name}</Text>
+
       {/* Progress Bar */}
       <View style={styles.progressContainer}>
         <Text style={styles.progressLabel}>
@@ -86,7 +87,7 @@ export default function ProfileScreen() {
       {/* "Open Pack" Button — placeholder for later */}
       {packsEarned > 0 && (
         <Button
-          title="Open a Pack!"
+          title="OPEN A PACK!"
           onPress={() => alert("Pack opening coming soon! 🚀")}
         />
       )}
