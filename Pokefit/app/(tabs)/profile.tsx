@@ -93,7 +93,7 @@ export default function ProfileScreen() {
       {/* Stats */}
       <View style={styles.statsRow}>
         <StatCard label="Cards" value={trainer.cardsCollected} />
-        <StatCard label="Coins" value={trainer.coins} />
+        <StatCard label="PokePoints" value={trainer.coins} />
       </View>
       <View style={styles.statsRow}>
         <StatCard label="All-Time Steps" value={trainer.allTimeSteps} />

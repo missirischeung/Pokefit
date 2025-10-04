@@ -56,8 +56,8 @@ export default function PurchaseScreen() {
 
     if (points < totalCost) {
       Alert.alert(
-        "Not enough points",
-        `You need ${totalCost} points to purchase ${n} pack${n > 1 ? "s" : ""}.`
+        "Not enough PokePoints",
+        `You need ${totalCost} PokePoints to purchase ${n} pack${n > 1 ? "s" : ""}.`
       );
       return;
     }
@@ -74,7 +74,7 @@ export default function PurchaseScreen() {
 
       {/* Stat cards — match Profile look */}
       <View style={styles.statsRow}>
-        <StatCard label="Your Points" value={points} />
+        <StatCard label="Your PokePoints" value={points} />
         <StatCard label="Packs Bought" value={totalPurchased} />
       </View>
 
