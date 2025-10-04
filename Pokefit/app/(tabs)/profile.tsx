@@ -17,8 +17,11 @@ export default function ProfileScreen() {
       <Image source={{ uri: trainer.image }} style={styles.image} />
       <Text style={styles.name}>{trainer.name}</Text>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> f175386 (Set up and installed expo dependencies)
 
       {/* Progress Bar */}
       <View style={styles.progressContainer}>
