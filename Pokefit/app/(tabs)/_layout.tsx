@@ -41,6 +41,15 @@ export default function TabLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen
+                name="purchase"
+                options={{
+                    title: "Purchase",
+                    tabBarIcon: ({ color }) => (
+                        <IconSymbol size={28} name="square.stack.3d.down.right" color={color} />
+                    ),
+                }}
+            />
         </Tabs>
     );
 }
