@@ -88,7 +88,7 @@ export default function CollectionScreen() {
         data={filtered}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        columnWrapperStyle={{ gap: 12 }}
+        columnWrapperStyle={{ gap: 12, justifyContent: "center"}}
         contentContainerStyle={{ paddingBottom: 24 }}
         style={{ marginTop: 12, width: "100%" }}
         renderItem={({ item }) => <CardTile item={item} />}
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
   // Grid tiles (card)
   cardTile: {
     flex: 1,
+    maxWidth: 280,
     backgroundColor: "#fff",
     borderRadius: 12,
     padding: 10,
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 6,
     elevation: 2,
+    alignSelf: "center",
   },
   cardImageWrap: {
     aspectRatio: 3 / 4,
