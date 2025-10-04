@@ -19,6 +19,15 @@ export default function TabLayout() {
 
             {/* New MVP tabs */}
             <Tabs.Screen
+                name="profile"
+                options={{
+                    title: "Profile",
+                    tabBarIcon: ({ color }) => (
+                        <IconSymbol size={28} name="square.stack.3d.down.right" color={color} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
                 name="collection"
                 options={{
                     title: "Collection",
