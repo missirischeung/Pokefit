@@ -38,7 +38,8 @@ export default function CollectionScreen() {
           • Cards (name, set, rarity){"\n"}
           • Quantity owned{"\n"}
           • Quick filters (set/rarity){"\n"}
-          • Tap a card for details
+          • Tap a card for details{"\n"}
+          • Testing push
         </ThemedText>
       </Collapsible>
     </ParallaxScrollView>
