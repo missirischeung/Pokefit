@@ -1,0 +1,81 @@
+-- Create Trainer table
+CREATE TABLE Trainer (
+    TrainerID UUID PRIMARY KEY,
+    Name VARCHAR(30) NOT NULL,
+    Age INTEGER NOT NULL,
+    Country VARCHAR(100) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT NOW(),
+    UpdatedAt TIMESTAMP DEFAULT NOW()
+);
+
+-- Create Collection table
+CREATE TABLE Collection (
+    TrainerID UUID NOT NULL,
+    CardID VARCHAR(255) NOT NULL,
+    AddedAt TIMESTAMP DEFAULT NOW(),
+    PRIMARY KEY (TrainerID, CardID),
+    FOREIGN KEY (TrainerID) REFERENCES Trainer(TrainerID) ON DELETE CASCADE
+);
+
+-- Create HealthData table
+CREATE TABLE HealthData (
+    TrainerID UUID NOT NULL,
+    Retrieved TIMESTAMP NOT NULL,
+    MetricType VARCHAR(20) NOT NULL CHECK (MetricType IN ('STEPS', 'DISTANCE')),
+    Metric DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (TrainerID, Retrieved),
+    FOREIGN KEY (TrainerID) REFERENCES Trainer(TrainerID) ON DELETE CASCADE
+);
+
+-- Create indexes for better query performance
+CREATE INDEX idx_collection_trainer ON Collection(TrainerID);
+CREATE INDEX idx_healthdata_trainer ON HealthData(TrainerID);
+CREATE INDEX idx_healthdata_retrieved ON HealthData(Retrieved);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE Trainer ENABLE ROW LEVEL SECURITY;
+ALTER TABLE Collection ENABLE ROW LEVEL SECURITY;
+ALTER TABLE HealthData ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies for Trainer
+CREATE POLICY "Users can view their own trainer profile"
+    ON Trainer FOR SELECT
+    USING (auth.uid() = TrainerID);
+
+CREATE POLICY "Users can insert their own trainer profile"
+    ON Trainer FOR INSERT
+    WITH CHECK (auth.uid() = TrainerID);
+
+CREATE POLICY "Users can update their own trainer profile"
+    ON Trainer FOR UPDATE
+    USING (auth.uid() = TrainerID);
+
+-- Create RLS policies for Collection
+CREATE POLICY "Users can view their own collection"
+    ON Collection FOR SELECT
+    USING (auth.uid() = TrainerID);
+
+CREATE POLICY "Users can insert into their own collection"
+    ON Collection FOR INSERT
+    WITH CHECK (auth.uid() = TrainerID);
+
+CREATE POLICY "Users can delete from their own collection"
+    ON Collection FOR DELETE
+    USING (auth.uid() = TrainerID);
+
+-- Create RLS policies for HealthData
+CREATE POLICY "Users can view their own health data"
+    ON HealthData FOR SELECT
+    USING (auth.uid() = TrainerID);
+
+CREATE POLICY "Users can insert their own health data"
+    ON HealthData FOR INSERT
+    WITH CHECK (auth.uid() = TrainerID);
+
+CREATE POLICY "Users can update their own health data"
+    ON HealthData FOR UPDATE
+    USING (auth.uid() = TrainerID);
+
+CREATE POLICY "Users can delete their own health data"
+    ON HealthData FOR DELETE
+    USING (auth.uid() = TrainerID);

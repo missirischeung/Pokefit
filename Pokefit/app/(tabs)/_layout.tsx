@@ -27,7 +27,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="profile" // 👈 points to app/(tabs)/profile.tsx
         options={{
           title: "Profile",
           tabBarIcon: ({ color }) => (
@@ -45,6 +45,32 @@ export default function TabLayout() {
           title: "Explore",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="collection"
+        options={{
+          title: "Collection",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol
+              size={28}
+              name="square.stack.3d.down.right"
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="purchase"
+        options={{
+          title: "Purchase",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol
+              size={28}
+              name="square.stack.3d.down.right"
+              color={color}
+            />
           ),
         }}
       />
