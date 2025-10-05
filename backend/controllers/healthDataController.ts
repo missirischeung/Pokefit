@@ -24,12 +24,12 @@ router.get('/:trainerId', async (req: Request, res: Response) => {
 
 // Add HealthData (trainerId, metricType, metric in JSON body)
 router.post('/', async (req: Request, res: Response) => {
-  const { trainerId, metricType, metric } = req.body;
-  if (!trainerId || !metricType || metric === undefined) {
+  const { trainerId, metricType, metric, activityDate } = req.body;
+  if (!trainerId || !metricType || metric === undefined || !activityDate) {
     return res.status(400).send('Missing required fields');
   }
   try {
-    const newData = await HealthData.addHealthData(trainerId, metricType, metric);
+    const newData = await HealthData.addHealthData(trainerId, metricType, metric, activityDate);
     if (newData) {
       res.status(201).json(newData);
     } else {

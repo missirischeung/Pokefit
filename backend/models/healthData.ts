@@ -3,10 +3,10 @@ import sql from '../db.ts';
 export type MetricType = 'STEPS' | 'DISTANCE';
 
 type HealthData = {
-    TrainerID: string; // UUID
-    Retrieved: string; // ISO timestamp
-    MetricType: MetricType;
-    Metric: number;
+    trainerId: string; // UUID
+    activityDate: string; // ISO timestamp
+    metricType: MetricType;
+    metric: number;
 };
 
 // Fetch all HealthData for a specific user
@@ -21,12 +21,13 @@ export const getHealthDataByTrainerId = async (trainerId: string): Promise<Healt
 export const addHealthData = async (
     trainerId: string,
     metricType: MetricType,
-    metric: number
+    metric: number,
+    activityDate: string
 ): Promise<HealthData | null> => {
     try {
         const [row] = await sql<HealthData[]>`
-            INSERT INTO HealthData (TrainerID, MetricType, Metric)
-            VALUES (${trainerId}, ${metricType}, ${metric})
+            INSERT INTO HealthData (TrainerID, ActivityDate, MetricType, Metric)
+            VALUES (${trainerId}, ${activityDate}, ${metricType}, ${metric})
             RETURNING *
         `;
         return row ?? null;

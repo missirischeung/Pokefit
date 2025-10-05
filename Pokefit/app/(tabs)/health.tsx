@@ -11,41 +11,69 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-type StepData = {
-  activityDate: string;
-  value: number;
-};
+// Stubbed trainerId for demonstration; replace with actual trainerId from auth/user context
+const TRAINER_ID = '4ef42a07-b32a-47c0-b01a-0b5152f05822';
 
-function generateMockSteps(): StepData[] {
-  const steps: StepData[] = [];
-  const today = new Date();
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() - i);
-    steps.push({
-      activityDate: date.toLocaleDateString(),
-      value: Math.floor(Math.random() * 10000) + 1000, // Random steps between 1000 and 11000
-    });
+async function fetchHealthData(): Promise<StepData[]> {
+  try {
+    const res = await fetch(`http://localhost:3000/healthData/${TRAINER_ID}`);
+    if (!res.ok) throw new Error('Failed to fetch health data');
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.error('Error fetching health data:', e);
+    return [];
   }
-  return steps;
 }
+
+async function postHealthData(step: StepData) {
+  try {
+    await fetch('http://localhost:3000/healthData', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        trainerId: TRAINER_ID, // stubbed trainerId
+        metricType: step.metricType,
+        metric: step.metric,
+        activityDate: step.activityDate,
+      }),
+    });
+  } catch (e) {
+    console.error('Error posting health data:', e);
+  }
+}
+
+type StepData = {
+    trainerId: string;
+    activityDate: string;
+    metricType: string;
+    metric: number;
+};
 
 export default function HealthScreen() {
   const [steps, setSteps] = useState<StepData[]>([]);
   const [stepInput, setStepInput] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
-    setSteps(generateMockSteps());
+    fetchHealthData().then(res => {
+        console.log(res);
+        setSteps(res);
+    });
   }, []);
 
-  const addStepEntry = () => {
+  const addStepEntry = async () => {
     if (!selectedDate || !stepInput) return;
     const newEntry: StepData = {
+      trainerId: TRAINER_ID,
       activityDate: selectedDate.toLocaleDateString(),
-      value: parseInt(stepInput, 10),
+      metricType: 'STEPS',
+      metric: parseInt(stepInput),
     };
-    const updatedSteps = [newEntry, ...steps];
+
+    await postHealthData(newEntry);
+
+    const updatedSteps = [...steps, newEntry];
     updatedSteps.sort((a, b) => {
       const dateA = new Date(a.activityDate);
       const dateB = new Date(b.activityDate);
@@ -75,9 +103,9 @@ export default function HealthScreen() {
           renderItem={({ item }) => (
             <View style={styles.item}>
               <Text style={styles.date}>
-                {item.activityDate}
+                {new Date(item.activityDate).toLocaleDateString()}
               </Text>
-              <Text style={styles.value}>{item.value} steps</Text>
+              <Text style={styles.value}>{Math.round(item.metric)} steps</Text>
             </View>
           )}
           ListEmptyComponent={
