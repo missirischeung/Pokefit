@@ -7,22 +7,12 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase";
+import { useSession } from "@/lib/session";
 import Account from "@/components/Accounts";
 import Auth from "@/components/Auth";
 
 export default function HomeScreen() {
-  const [session, setSession] = useState<Session | null>(null);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
+  const { session } = useSession();
 
   return (
     <ParallaxScrollView
