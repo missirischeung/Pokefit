@@ -26,7 +26,7 @@ export const addHealthData = async (
 ): Promise<HealthData | null> => {
     try {
         const [row] = await sql<HealthData[]>`
-            INSERT INTO HealthData (TrainerID, ActivityDate, MetricType, Metric)
+            INSERT INTO HealthData (TrainerID, activity_date, MetricType, Metric)
             VALUES (${trainerId}, ${activityDate}, ${metricType}, ${metric})
             RETURNING *
         `;

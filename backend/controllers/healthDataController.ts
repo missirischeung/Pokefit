@@ -25,6 +25,7 @@ router.get('/:trainerId', async (req: Request, res: Response) => {
 // Add HealthData (trainerId, metricType, metric in JSON body)
 router.post('/', async (req: Request, res: Response) => {
   const { trainerId, metricType, metric, activityDate } = req.body;
+  console.log(req.body);
   if (!trainerId || !metricType || metric === undefined || !activityDate) {
     return res.status(400).send('Missing required fields');
   }
