@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
+  Image,
 } from "react-native";
 import { supabase } from "../lib/supabase";
 
@@ -57,10 +58,20 @@ export default function Auth() {
       style={styles.container}
     >
       <View style={styles.card}>
+        {/* 🧩 Logo */}
+        <Image
+          source={{
+            uri: "https://i.imgur.com/0Yz9u8O.png", // replace with your own logo URL
+          }}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+
+        {/* Title */}
         <Text style={styles.title}>Welcome Back</Text>
         <Text style={styles.subtitle}>Sign in or create an account</Text>
 
-        {/* Email Input */}
+        {/* Email */}
         <View style={[styles.verticallySpaced, styles.mt20]}>
           <TextInput
             placeholder="email@address.com"
@@ -73,7 +84,7 @@ export default function Auth() {
           />
         </View>
 
-        {/* Password Input */}
+        {/* Password */}
         <View style={styles.verticallySpaced}>
           <TextInput
             placeholder="Password"
@@ -86,7 +97,7 @@ export default function Auth() {
           />
         </View>
 
-        {/* Sign In Button */}
+        {/* Sign In */}
         <View style={[styles.verticallySpaced, styles.mt20]}>
           <TouchableOpacity
             style={[styles.primaryBtn, loading && styles.buttonDisabled]}
@@ -100,7 +111,7 @@ export default function Auth() {
           </TouchableOpacity>
         </View>
 
-        {/* Sign Up Button */}
+        {/* Sign Up */}
         <View style={styles.verticallySpaced}>
           <TouchableOpacity
             style={[styles.secondaryBtn, loading && styles.buttonDisabled]}
@@ -123,12 +134,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
   },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: { marginTop: 20 },
   card: {
     backgroundColor: "#fff",
     borderRadius: 16,
@@ -138,13 +143,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     shadowRadius: 12,
     elevation: 4,
+    alignItems: "center",
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 12,
+    borderRadius: 16,
   },
   title: {
     fontSize: 26,
     fontWeight: "800",
     textAlign: "center",
     color: "#0cc0df", // aqua
-    marginBottom: 8,
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
@@ -152,17 +164,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 16,
   },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: "stretch",
+  },
+  mt20: { marginTop: 20 },
   input: {
     height: 46,
     borderWidth: 1,
-    borderColor: "#f4a6b8", // soft pink tone
+    borderColor: "#f4a6b8",
     borderRadius: 10,
     paddingHorizontal: 12,
     backgroundColor: "#fffafc",
     fontSize: 15,
   },
   primaryBtn: {
-    backgroundColor: "#0cc0df", // aqua
+    backgroundColor: "#0cc0df",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
@@ -178,7 +196,7 @@ const styles = StyleSheet.create({
   },
   secondaryBtn: {
     borderWidth: 2,
-    borderColor: "#ff914d", // orange
+    borderColor: "#ff914d",
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
@@ -188,7 +206,5 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
+  buttonDisabled: { opacity: 0.6 },
 });
