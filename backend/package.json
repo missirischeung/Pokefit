@@ -5,17 +5,20 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./server.js",
+    "dev": "nodemon ./server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
+    "pokemontcgsdk": "^2.0.0",
     "postgres": "^3.4.7"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "@types/node": "^24.6.2",
+    "dotenv": "^17.2.3",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

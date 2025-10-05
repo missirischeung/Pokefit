@@ -1,6 +1,6 @@
 -- Create Trainer table
 CREATE TABLE Trainer (
-    TrainerID UUID PRIMARY KEY,
+    TrainerID UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     Name VARCHAR(30) NOT NULL,
     Age INTEGER NOT NULL,
     Country VARCHAR(100) NOT NULL,
@@ -10,21 +10,19 @@ CREATE TABLE Trainer (
 
 -- Create Collection table
 CREATE TABLE Collection (
-    TrainerID UUID NOT NULL,
+    TrainerID UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     CardID VARCHAR(255) NOT NULL,
     AddedAt TIMESTAMP DEFAULT NOW(),
-    PRIMARY KEY (TrainerID, CardID),
-    FOREIGN KEY (TrainerID) REFERENCES Trainer(TrainerID) ON DELETE CASCADE
+    PRIMARY KEY (TrainerID, CardID)
 );
 
 -- Create HealthData table
 CREATE TABLE HealthData (
-    TrainerID UUID NOT NULL,
+    TrainerID UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     Retrieved TIMESTAMP NOT NULL,
     MetricType VARCHAR(20) NOT NULL CHECK (MetricType IN ('STEPS', 'DISTANCE')),
     Metric DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (TrainerID, Retrieved),
-    FOREIGN KEY (TrainerID) REFERENCES Trainer(TrainerID) ON DELETE CASCADE
+    PRIMARY KEY (TrainerID, Retrieved)
 );
 
 -- Create indexes for better query performance

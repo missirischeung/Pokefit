@@ -13,14 +13,16 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
     if (session && session.user) {
       // authenticated -> ensure we are on the app
       try {
-        router.replace("(tabs)" as any);
+        // use absolute path so the router can find the group root
+        router.replace("/(tabs)/profile" as any);
       } catch (e) {
         // swallow router typing/runtime issues
       }
     } else {
       // not authenticated -> send to auth
       try {
-        router.replace("auth" as any);
+        // navigate to the auth stack by absolute path
+        router.replace("/auth" as any);
       } catch (e) {
         // swallow router typing/runtime issues
       }
