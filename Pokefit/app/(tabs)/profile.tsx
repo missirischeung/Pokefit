@@ -287,7 +287,7 @@ export default function ProfileScreen() {
                 {/* Profile header */}
                 <Image
                     source={{
-                        uri: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/ash.png",
+                        uri: "https://i.imgur.com/QR71Hox.png",
                     }}
                     style={styles.image}
                 />
