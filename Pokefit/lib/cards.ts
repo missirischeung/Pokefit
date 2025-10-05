@@ -39,7 +39,7 @@
     const setId =
       setObj.id ?? raw.setId ?? raw.set_id ?? setObj.code ?? "unknown";
     const setName =
-      setObj.name ?? raw.setName ?? raw.set_name ?? "Unknown Set";
+      setObj.name ?? raw.setName ?? raw.set_name ?? "Scarlet & Violet 151";
   
     // rarity
     const rarity =

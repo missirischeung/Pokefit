@@ -128,10 +128,15 @@ export default function ProfileScreen() {
       // setCoins(u.coins);
 
       setShowBuy(false);
+
+      // Build readable card list
+      const cardNames = pulls.map((c) => `• ${c.name}`).join("\n");
+      
       Alert.alert(
         "Pack Opened 🎉",
-        `You received ${pulls.length} cards.\n(Added to your collection.)`
+        `You received ${pulls.length} cards:\n${cardNames}\n\n(Added to your collection.)`
       );
+      
     } catch (e: any) {
       Alert.alert("Purchase failed", e?.message || "Try again.");
     }
@@ -217,14 +222,14 @@ export default function ProfileScreen() {
         </TouchableOpacity>
 
         {/* Stats */}
-        <View style={styles.statsRow}>
+        {/* <View style={styles.statsRow}>
           <StatCard label="Cards" value={cardsCollected} />
           <StatCard label="PokePoints" value={coins} />
         </View>
         <View style={styles.statsRow}>
           <StatCard label="All-Time Steps" value={allTimeSteps} />
           <StatCard label="Steps For Next Pack" value={stepsRemaining} />
-        </View>
+        </View> */}
       </ScrollView>
 
       {/* ----- Purchase Modal ----- */}

@@ -8,9 +8,11 @@ import {
   RefreshControl,
   Image,
   Pressable,
+  TextInput,
+  Alert,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { ensureSeed, getCollection } from "../../lib/storage";
+import { ensureSeed, getCollection, clearCollection } from "../../lib/storage";
 import { getCardById, Card } from "../../lib/cards";
 
 const RARITY_ORDER = [
@@ -45,13 +47,12 @@ export default function CollectionScreen() {
   const [owned, setOwned] = useState<Card[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [rarity, setRarity] = useState<Rarity>("All");
+  const [search, setSearch] = useState("");
 
   const load = useCallback(async () => {
-    await ensureSeed();
+    await ensureSeed(); // seeds empty collection [] on first run
     const ids = await getCollection(); // string[]
-    const cards = ids
-      .map((id) => getCardById(id))
-      .filter((c): c is Card => !!c);
+    const cards = ids.map((id) => getCardById(id)).filter((c): c is Card => !!c);
     setOwned(cards);
   }, []);
 
@@ -63,15 +64,19 @@ export default function CollectionScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    load()
-      .catch(() => {})
-      .finally(() => setRefreshing(false));
+    load().finally(() => setRefreshing(false));
   };
 
-  const filtered = useMemo(() => {
+  const filteredByRarity = useMemo(() => {
     if (rarity === "All") return owned;
     return owned.filter((c) => (c.rarity || "").toLowerCase() === rarity.toLowerCase());
   }, [owned, rarity]);
+
+  const normalizedQuery = search.trim().toLowerCase();
+  const filtered = useMemo(() => {
+    if (!normalizedQuery) return filteredByRarity;
+    return filteredByRarity.filter((c) => c.name.toLowerCase().includes(normalizedQuery));
+  }, [filteredByRarity, normalizedQuery]);
 
   // Optionally sort: by rarity (per RARITY_ORDER) then name
   const sorted = useMemo(() => {
@@ -89,13 +94,49 @@ export default function CollectionScreen() {
     });
   }, [filtered]);
 
+  const totalOwned = owned.length;
+  const visible = sorted.length;
+  const showSubset = rarity !== "All" || normalizedQuery.length > 0;
+  const counterText = showSubset ? `Showing ${visible} of ${totalOwned} cards` : `${totalOwned} cards`;
+
+  // ---- Clear collection handler ----
+  const handleClearCollection = () => {
+    Alert.alert("Clear collection?", "This will remove all saved cards.", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Clear",
+        style: "destructive",
+        onPress: async () => {
+          await clearCollection();
+          await load(); // reload UI
+        },
+      },
+    ]);
+  };
+
   return (
     <ScrollView
       style={styles.page}
       contentContainerStyle={styles.container}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-      <Text style={styles.title}>Your Collection</Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>Your Collection</Text>
+        <Text style={styles.counter}>{counterText}</Text>
+      </View>
+
+      {/* Search */}
+      <View style={styles.searchRow}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search by name…"
+          value={search}
+          onChangeText={setSearch}
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="while-editing"
+        />
+      </View>
 
       {/* Rarity Filter */}
       <View style={styles.filterRow}>
@@ -103,11 +144,9 @@ export default function CollectionScreen() {
           onPress={() => setRarity("All")}
           style={[styles.filterChip, rarity === "All" && styles.filterChipActive]}
         >
-          <Text style={[styles.filterText, rarity === "All" && styles.filterTextActive]}>
-            All
-          </Text>
+          <Text style={[styles.filterText, rarity === "All" && styles.filterTextActive]}>All</Text>
         </Pressable>
-        {["Common", "Uncommon", "Rare", "Rare Holo", "Rare Ultra"].map((r) => {
+        {["Common", "Uncommon", "Rare"].map((r) => {
           const active = rarity.toLowerCase() === r.toLowerCase();
           return (
             <Pressable
@@ -115,9 +154,7 @@ export default function CollectionScreen() {
               onPress={() => setRarity(r as Rarity)}
               style={[styles.filterChip, active && styles.filterChipActive]}
             >
-              <Text style={[styles.filterText, active && styles.filterTextActive]}>
-                {r}
-              </Text>
+              <Text style={[styles.filterText, active && styles.filterTextActive]}>{r}</Text>
             </Pressable>
           );
         })}
@@ -127,11 +164,20 @@ export default function CollectionScreen() {
       <View style={styles.grid}>
         {sorted.length === 0 ? (
           <Text style={styles.empty}>
-            No cards yet. Open a pack from your Profile to add some!
+            {totalOwned === 0
+              ? "No cards yet. Open a pack from your Profile to add some!"
+              : "No cards match your search/filter."}
           </Text>
         ) : (
           sorted.map((c) => <CardTile key={c.id} card={c} />)
         )}
+      </View>
+
+      {/* Clear Collection (dev helper) */}
+      <View style={{ width: "100%", marginTop: 18, alignItems: "center" }}>
+        <Pressable style={styles.clearBtn} onPress={handleClearCollection}>
+          <Text style={styles.clearBtnText}>Clear Collection</Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
@@ -171,11 +217,33 @@ const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: "#f4f4f4" },
   container: { padding: 16, alignItems: "center" },
 
-  title: {
+  headerRow: {
     width: "100%",
+    marginBottom: 8,
+  },
+  title: {
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 12,
+  },
+  counter: {
+    marginTop: 2,
+    fontSize: 12,
+    color: "#6b7280",
+  },
+
+  // Search
+  searchRow: {
+    width: "100%",
+    marginTop: 10,
+    marginBottom: 8,
+  },
+  searchInput: {
+    height: 44,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
   },
 
   // Filters
@@ -202,12 +270,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 12,
-    justifyContent: "center", // web: auto-wrap to as many as fit per row
+    justifyContent: "center",
     marginTop: 6,
   },
 
   cardTile: {
-    flexBasis: 160,     // responsive width
+    flexBasis: 160,
     maxWidth: 190,
     backgroundColor: "#fff",
     borderRadius: 12,
@@ -248,4 +316,20 @@ const styles = StyleSheet.create({
   rarityText: { fontSize: 11, fontWeight: "700", color: "#4f46e5" },
 
   empty: { marginTop: 40, color: "#6b7280", textAlign: "center" },
+
+  // Clear Collection Button
+  clearBtn: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    backgroundColor: "#ef4444", // red-500
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  clearBtnText: {
+    color: "#fff",
+    fontWeight: "800",
+  },
 });
