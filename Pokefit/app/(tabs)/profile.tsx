@@ -71,6 +71,10 @@ export default function ProfileScreen() {
         [qty, selectedSet]
     );
 
+    const [points, setPoints] = useState(0);
+    const [packsOpened, setPacksOpened] = useState(0);
+    const [packsAvailable, setPacksAvailable] = useState(0);
+
     // Animated overlay for pack opening
     const [showPack, setShowPack] = useState(false);
     const [revealedCards, setRevealedCards] = useState<Card[]>([]);
@@ -127,24 +131,44 @@ export default function ProfileScreen() {
             Alert.alert("Invalid steps", "Enter a positive number.");
             return;
         }
-        const next = await addSteps(n);
-        setAllTimeSteps(next);
+
+        const newPoints = Math.floor(n / 100);
+        const nextSteps = await addSteps(n);
+
+        setAllTimeSteps(nextSteps);
+        setPoints((prev) => {
+            const updatedPoints = prev + newPoints;
+            setPacksAvailable(Math.floor(updatedPoints / 100)); // 👈 each 100 pts = 1 pack
+            return updatedPoints;
+        });
         setStepInput("");
         setLastSynced(new Date().toLocaleString());
     };
 
     const handleConfirmPurchase = async () => {
         try {
+            const requiredPoints = qty * selectedSet.cost;
+            if (points < requiredPoints) {
+                Alert.alert(
+                    "Not enough points",
+                    "You need more points to open this pack!"
+                );
+                return;
+            }
+
             const totalCards = qty * pullsPerPack;
             const pulls = openFromSet(selectedSet.id, totalCards);
             await addToCollection(pulls.map((c) => c.id));
 
-            // Set the revealed cards and trigger the overlay
+            const updatedPoints = points - requiredPoints;
+            setPoints(updatedPoints);
+            setPacksOpened((prev) => prev + qty);
+            setPacksAvailable(Math.floor(updatedPoints / 100)); // 👈 recalc remaining packs
+
             setRevealedCards(pulls);
             setShowBuy(false);
             setShowPack(true);
 
-            // Animate the popup in
             Animated.parallel([
                 Animated.timing(overlayFade, {
                     toValue: 1,
@@ -157,11 +181,8 @@ export default function ProfileScreen() {
                     useNativeDriver: true,
                 }),
             ]).start();
-        } catch (e) {
-            Alert.alert(
-                "Purchase failed",
-                (e as Error)?.message || "Try again."
-            );
+        } catch (e: any) {
+            Alert.alert("Purchase failed", e.message || "Try again.");
         }
     };
 
@@ -297,18 +318,37 @@ export default function ProfileScreen() {
                 {/* 🟡 Points → Next Pack */}
                 <View style={styles.progressContainer}>
                     <Text style={styles.progressLabel}>
-                        {pointsIntoCurrentPack} / {packCost} points → Next Pack
+                        {points % packCost} / {packCost} points → Next Pack
                     </Text>
                     <View style={styles.progressBackground}>
                         <View
                             style={[
                                 styles.progressFill,
-                                { width: `${pointProgress * 100}%` },
+                                {
+                                    width: `${
+                                        ((points % packCost) / packCost) * 100
+                                    }%`,
+                                },
                             ]}
                         />
                     </View>
-                    <Text style={styles.packsEarned}>
-                        🎁 Packs Earned: {packsEarned}
+                </View>
+
+                {/* 🧮 Summary Info */}
+                <View style={[styles.progressContainer, { marginTop: 10 }]}>
+                    <Text style={styles.progressLabel}>
+                        💰 Points: {points} | 🎁 Packs Available:{" "}
+                        {packsAvailable}
+                    </Text>
+                    <Text
+                        style={[
+                            styles.packsEarned,
+                            {
+                                color: packsAvailable > 0 ? "#FFD700" : "#333", // gold if you have packs ready
+                            },
+                        ]}
+                    >
+                        📦 Packs Opened: {packsOpened}
                     </Text>
                 </View>
 
@@ -720,13 +760,13 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         backgroundColor: "rgba(0, 0, 0, 0.6)",
-        justifyContent: "center",   // centers vertically
-        alignItems: "center",       // centers horizontally
+        justifyContent: "center", // centers vertically
+        alignItems: "center", // centers horizontally
         zIndex: 999,
-        paddingHorizontal: 20,      // safe horizontal space on smaller phones
-      },
-      
-      packPopup: {
+        paddingHorizontal: 20, // safe horizontal space on smaller phones
+    },
+
+    packPopup: {
         width: "90%",
         maxWidth: 420,
         backgroundColor: "#fff",
@@ -739,12 +779,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 10,
         elevation: 10,
-      
+
         // Responsive behavior:
-        maxHeight: "80%",           // ensures it doesn’t overflow smaller screens
-      },
-      
-     
+        maxHeight: "80%", // ensures it doesn’t overflow smaller screens
+    },
     card: {
         width: 260,
         height: 380,
@@ -760,14 +798,14 @@ const styles = StyleSheet.create({
         borderColor: "#FFD700",
         overflow: "hidden", // 👈 prevents image spillover
     },
-    
+
     cardImage: {
         width: 200,
         height: 280,
         resizeMode: "contain", // 👈 keeps full image visible
         borderRadius: 10,
         marginBottom: 10,
-    },    
+    },
     cardTitle: { fontWeight: "700", fontSize: 16, color: "#333" },
     packText: {
         fontSize: 16,
