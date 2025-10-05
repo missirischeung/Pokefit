@@ -30,7 +30,6 @@ Every step contributes toward earning points, every point brings you closer to o
 ### **Integration**
 * **Apple HealthKit (Planned)**
 * **Expo Router**
-* 
 ---
 
 ## Features
