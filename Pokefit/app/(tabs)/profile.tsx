@@ -539,22 +539,15 @@ export default function ProfileScreen() {
                                 <Text style={styles.packText}>
                                     ✨ You opened:
                                 </Text>
-                                <ScrollView style={{ maxHeight: 280 }}>
-                                    {revealedCards.map((c) => (
-                                        <View
-                                            key={c.id}
-                                            style={styles.revealedRow}
-                                        >
-                                            <Image
-                                                source={{ uri: c.image }}
-                                                style={styles.revealedImage}
-                                            />
-                                            <Text style={styles.revealedText}>
-                                                {c.name}
-                                            </Text>
-                                        </View>
-                                    ))}
-                                </ScrollView>
+                                <ScrollView style={styles.revealedScroll}>
+    {revealedCards.map((c) => (
+        <View key={c.id} style={styles.revealedRow}>
+            <Image source={{ uri: c.image }} style={styles.revealedImage} />
+            <Text style={styles.revealedText}>{c.name}</Text>
+        </View>
+    ))}
+</ScrollView>
+
 
                                 <TouchableOpacity
                                     style={styles.closeButton}
@@ -867,18 +860,36 @@ const styles = StyleSheet.create({
     cardTitle: { fontWeight: "700", fontSize: 16, color: "#333" },
     packText: {
         fontSize: 16,
-        fontWeight: "500",
-        color: "#333",
-        marginBottom: 10,
+        fontWeight: "700",
+        color: "#0cc0df", // orange title text
+        marginBottom: 12,
+        textAlign: "center",
     },
     revealedRow: {
         flexDirection: "row",
         alignItems: "center",
-        marginVertical: 5,
+        marginVertical: 6,
         gap: 10,
+        backgroundColor: "#fef6f9", // soft light pink background
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: "#ffd9e1", // pink border to match rest of UI
     },
-    revealedImage: { width: 50, height: 50, borderRadius: 6 },
-    revealedText: { fontSize: 16, fontWeight: "600", color: "#333" },
+    revealedImage: {
+        width: 55,
+        height: 55,
+        borderRadius: 6,
+        borderWidth: 2,
+        borderColor: "#0cc0df", // aqua outline for card image
+    },
+    revealedScroll: {
+        maxHeight: 280,
+        width: "100%",
+        paddingHorizontal: 6,
+    },
+    revealedText: { fontSize: 15, fontWeight: "700", color: "#333" },
     closeButton: {
         backgroundColor: "#0cc0df",
         paddingVertical: 10,
