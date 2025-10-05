@@ -12,10 +12,6 @@ import {
 } from "react-native";
 import { supabase } from "../lib/supabase";
 
-// Tells Supabase Auth to continuously refresh the session automatically if
-// the app is in the foreground. When this is added, you will continue to receive
-// `onAuthStateChange` events with the `TOKEN_REFRESHED` or `SIGNED_OUT` event
-// if the user's session is terminated. This should only be registered once.
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
     supabase.auth.startAutoRefresh();
@@ -32,10 +28,9 @@ export default function Auth() {
   async function signInWithEmail() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+      email,
+      password,
     });
-
     if (error) Alert.alert(error.message);
     setLoading(false);
   }
@@ -46,8 +41,8 @@ export default function Auth() {
       data: { session },
       error,
     } = await supabase.auth.signUp({
-      email: email,
-      password: password,
+      email,
+      password,
     });
 
     if (error) Alert.alert(error.message);
@@ -62,54 +57,58 @@ export default function Auth() {
       style={styles.container}
     >
       <View style={styles.card}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>Welcome Back</Text>
         <Text style={styles.subtitle}>Sign in or create an account</Text>
 
+        {/* Email Input */}
         <View style={[styles.verticallySpaced, styles.mt20]}>
           <TextInput
             placeholder="email@address.com"
-            placeholderTextColor="#9AA4AE"
-            onChangeText={(text) => setEmail(text)}
+            placeholderTextColor="#A1A1AA"
+            onChangeText={setEmail}
             value={email}
-            autoCapitalize={"none"}
+            autoCapitalize="none"
             keyboardType="email-address"
             style={styles.input}
           />
         </View>
 
+        {/* Password Input */}
         <View style={styles.verticallySpaced}>
           <TextInput
             placeholder="Password"
-            placeholderTextColor="#9AA4AE"
-            onChangeText={(text) => setPassword(text)}
+            placeholderTextColor="#A1A1AA"
+            onChangeText={setPassword}
             value={password}
-            secureTextEntry={true}
-            autoCapitalize={"none"}
+            secureTextEntry
+            autoCapitalize="none"
             style={styles.input}
           />
         </View>
 
+        {/* Sign In Button */}
         <View style={[styles.verticallySpaced, styles.mt20]}>
           <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={() => signInWithEmail()}
-            activeOpacity={0.8}
+            style={[styles.primaryBtn, loading && styles.buttonDisabled]}
+            onPress={signInWithEmail}
+            activeOpacity={0.85}
             disabled={loading}
           >
-            <Text style={styles.buttonText}>
-              {loading ? "Loading..." : "Sign in"}
+            <Text style={styles.primaryBtnText}>
+              {loading ? "Loading..." : "Sign In"}
             </Text>
           </TouchableOpacity>
         </View>
 
+        {/* Sign Up Button */}
         <View style={styles.verticallySpaced}>
           <TouchableOpacity
-            style={[styles.ghostButton, loading && styles.buttonDisabled]}
-            onPress={() => signUpWithEmail()}
-            activeOpacity={0.8}
+            style={[styles.secondaryBtn, loading && styles.buttonDisabled]}
+            onPress={signUpWithEmail}
+            activeOpacity={0.85}
             disabled={loading}
           >
-            <Text style={styles.ghostButtonText}>Sign up</Text>
+            <Text style={styles.secondaryBtnText}>Create Account</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -122,67 +121,74 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 16,
+    backgroundColor: "#fff",
   },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: "stretch",
   },
-  mt20: {
-    marginTop: 20,
-  },
+  mt20: { marginTop: 20 },
   card: {
     backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 20,
+    borderRadius: 16,
+    padding: 24,
     shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 8 },
     shadowRadius: 12,
-    elevation: 6,
+    elevation: 4,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 4,
-    color: "#1F2937",
+    fontSize: 26,
+    fontWeight: "800",
+    textAlign: "center",
+    color: "#0cc0df", // aqua
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 14,
     color: "#6B7280",
-    marginBottom: 12,
+    textAlign: "center",
+    marginBottom: 16,
   },
   input: {
     height: 46,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 8,
+    borderColor: "#f4a6b8", // soft pink tone
+    borderRadius: 10,
     paddingHorizontal: 12,
-    backgroundColor: "#FAFAFB",
+    backgroundColor: "#fffafc",
+    fontSize: 15,
   },
-  button: {
-    backgroundColor: "#0EA5A4",
-    paddingVertical: 12,
-    borderRadius: 8,
+  primaryBtn: {
+    backgroundColor: "#0cc0df", // aqua
+    paddingVertical: 14,
+    borderRadius: 10,
     alignItems: "center",
+    shadowColor: "#0cc0df",
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  primaryBtnText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  secondaryBtn: {
+    borderWidth: 2,
+    borderColor: "#ff914d", // orange
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  secondaryBtnText: {
+    color: "#ff914d",
+    fontWeight: "700",
+    fontSize: 16,
   },
   buttonDisabled: {
     opacity: 0.6,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-  ghostButton: {
-    borderWidth: 1,
-    borderColor: "#0EA5A4",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  ghostButtonText: {
-    color: "#0EA5A4",
-    fontWeight: "600",
   },
 });
