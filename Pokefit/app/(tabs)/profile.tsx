@@ -715,24 +715,39 @@ const styles = StyleSheet.create({
     // Optional animated overlay (not interactive in this version)
     overlay: {
         position: "absolute",
-        inset: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-    },
-    packPopup: {
-        width: "100%",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
+        justifyContent: "center",   // centers vertically
+        alignItems: "center",       // centers horizontally
+        zIndex: 999,
+        paddingHorizontal: 20,      // safe horizontal space on smaller phones
+      },
+      
+      packPopup: {
+        width: "90%",
+        maxWidth: 420,
         backgroundColor: "#fff",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderRadius: 20,
         alignItems: "center",
+        justifyContent: "center",
         paddingVertical: 30,
+        paddingHorizontal: 20,
         shadowColor: "#000",
         shadowOpacity: 0.3,
         shadowRadius: 10,
         elevation: 10,
-    },
+      
+        // Responsive behavior:
+        maxHeight: "80%",           // ensures it doesn’t overflow smaller screens
+      },
+      
+     
     card: {
-        width: 200,
-        height: 300,
+        width: 260,
+        height: 380,
         backgroundColor: "#fff",
         borderRadius: 16,
         alignItems: "center",
@@ -743,7 +758,9 @@ const styles = StyleSheet.create({
         elevation: 10,
         borderWidth: 2,
         borderColor: "#FFD700",
+        overflow: "hidden", // 👈 prevents image spillover
     },
+    
     cardImage: {
         width: 200,
         height: 280,
