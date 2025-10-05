@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, View, AppState } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  View,
+  AppState,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
+} from "react-native";
 import { supabase } from "../lib/supabase";
-import { Button } from "react-native";
-import { TextInput } from "react-native";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -49,48 +57,71 @@ export default function Auth() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput
-          id="Email"
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          autoCapitalize={"none"}
-        />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <View style={styles.card}>
+        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.subtitle}>Sign in or create an account</Text>
+
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <TextInput
+            placeholder="email@address.com"
+            placeholderTextColor="#9AA4AE"
+            onChangeText={(text) => setEmail(text)}
+            value={email}
+            autoCapitalize={"none"}
+            keyboardType="email-address"
+            style={styles.input}
+          />
+        </View>
+
+        <View style={styles.verticallySpaced}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="#9AA4AE"
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            secureTextEntry={true}
+            autoCapitalize={"none"}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={() => signInWithEmail()}
+            activeOpacity={0.8}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? "Loading..." : "Sign in"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.verticallySpaced}>
+          <TouchableOpacity
+            style={[styles.ghostButton, loading && styles.buttonDisabled]}
+            onPress={() => signUpWithEmail()}
+            activeOpacity={0.8}
+            disabled={loading}
+          >
+            <Text style={styles.ghostButtonText}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          id="Password"
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Password"
-          autoCapitalize={"none"}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title="Sign in"
-          disabled={loading}
-          onPress={() => signInWithEmail()}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button
-          title="Sign up"
-          disabled={loading}
-          onPress={() => signUpWithEmail()}
-        />
-      </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    padding: 12,
+    flex: 1,
+    justifyContent: "center",
+    padding: 16,
   },
   verticallySpaced: {
     paddingTop: 4,
@@ -99,5 +130,59 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 20,
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 4,
+    color: "#1F2937",
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#6B7280",
+    marginBottom: 12,
+  },
+  input: {
+    height: 46,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "#FAFAFB",
+  },
+  button: {
+    backgroundColor: "#0EA5A4",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  ghostButton: {
+    borderWidth: 1,
+    borderColor: "#0EA5A4",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  ghostButtonText: {
+    color: "#0EA5A4",
+    fontWeight: "600",
   },
 });
