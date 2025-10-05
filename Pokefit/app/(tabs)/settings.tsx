@@ -1,4 +1,3 @@
-// app/(tabs)/settings.tsx
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
@@ -12,7 +11,7 @@ import {
   View,
 } from "react-native";
 import { useRouter } from "expo-router";
-import supabase from "../../lib/supabase"; // default export; change if yours is named
+import supabase from "../../lib/supabase";
 import {
   ensureSeed,
   getUser,
@@ -26,23 +25,14 @@ import {
 
 export default function SettingsScreen() {
   const router = useRouter();
-
   const [name, setName] = useState("");
-  const [coins, setCoins] = useState<number>(0);
-  const [steps, setStepsState] = useState<number>(0);
-  const [collectionCount, setCollectionCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
     await ensureSeed();
     const u = await getUser();
-    const s = await getSteps();
-    const col = await getCollection();
     setName(u?.name ?? "Ash Ketchum");
-    setCoins(u?.coins ?? 1200);
-    setStepsState(s);
-    setCollectionCount(col.length);
     setLoading(false);
   }, []);
 
@@ -69,7 +59,7 @@ export default function SettingsScreen() {
         style: "destructive",
         onPress: async () => {
           await clearCollection();
-          await load();
+          Alert.alert("Collection cleared", "All cards have been removed.");
         },
       },
     ]);
@@ -85,9 +75,9 @@ export default function SettingsScreen() {
           text: "Reset",
           style: "destructive",
           onPress: async () => {
-            await resetAll();     // wipes user, steps, collection
-            await ensureSeed();   // seeds demo defaults again
-            await load();         // refresh UI
+            await resetAll();
+            await ensureSeed();
+            await load();
             Alert.alert("Reset complete", "All data has been reset.");
           },
         },
@@ -103,38 +93,24 @@ export default function SettingsScreen() {
         style: "destructive",
         onPress: async () => {
           await setSteps(0);
-          await load();
-        },
-      },
-    ]);
-  };
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert("Error", "Failed to sign out. Please try again.");
-      return;
-    }
-    // optional: clear local demo data too
-    await resetAll();
-    Alert.alert("Logged out", "You have been signed out.", [
-      {
-        text: "OK",
-        onPress: () => {
-          router.replace("/"); // send to your login/landing route
+          Alert.alert("Steps cleared", "Your steps have been reset to 0.");
         },
       },
     ]);
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
       <ScrollView style={styles.page} contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Settings</Text>
+        <Text style={styles.screenTitle}>⚙️ Settings</Text>
 
-        {/* Profile card */}
+        {/* --- Profile Section --- */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Profile</Text>
+
           <Text style={styles.label}>Display name</Text>
           <View style={styles.row}>
             <TextInput
@@ -144,118 +120,151 @@ export default function SettingsScreen() {
               onChangeText={setName}
               autoCapitalize="words"
             />
-            <Pressable style={styles.primaryBtn} onPress={handleSaveName} disabled={loading}>
+            <Pressable
+              style={[styles.btn, styles.primaryBtn]}
+              onPress={handleSaveName}
+              disabled={loading}
+            >
               <Text style={styles.primaryBtnText}>Save</Text>
             </Pressable>
           </View>
         </View>
 
-        {/* Data */}
+        {/* --- Data Section --- */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Data</Text>
 
-          <Pressable style={styles.neutralBtn} onPress={handleClearStepsOnly} disabled={loading}>
+          <Pressable
+            style={[styles.btn, styles.neutralBtn]}
+            onPress={handleClearStepsOnly}
+            disabled={loading}
+          >
             <Text style={styles.neutralBtnText}>Clear Steps Only</Text>
           </Pressable>
 
-          <Pressable style={styles.warnBtn} onPress={handleClearCollection} disabled={loading}>
-            <Text style={styles.warnBtnText}>Clear Collection</Text>
+          <Pressable
+            style={[styles.btn, styles.orangeBtn]}
+            onPress={handleClearCollection}
+            disabled={loading}
+          >
+            <Text style={styles.orangeBtnText}>Clear Collection</Text>
           </Pressable>
 
-          <Pressable style={styles.dangerBtn} onPress={handleResetAll} disabled={loading}>
-            <Text style={styles.dangerBtnText}>Reset All (Name, Steps, Collection)</Text>
+          <Pressable
+            style={[styles.btn, styles.resetBtn]}
+            onPress={handleResetAll}
+            disabled={loading}
+          >
+            <Text style={styles.resetBtnText}>Reset All (Name, Steps, Collection)</Text>
           </Pressable>
         </View>
-
-        {/* <Pressable style={styles.logoutBtn} onPress={handleLogout} disabled={loading}>
-          <Text style={styles.logoutBtnText}>Log Out</Text>
-        </Pressable> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: "#f4f4f4" },
-  container: { padding: 20 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 16 },
+  page: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  container: {
+    padding: 20,
+  },
 
+  screenTitle: {
+    fontSize: 26,
+    fontWeight: "800",
+    color: "#333",
+    textAlign: "center",
+    marginBottom: 24,
+  },
+
+  // --- Card Section ---
   card: {
     backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 14,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 22,
+    borderWidth: 1,
+    borderColor: "#ffd9e1", // soft pink outline
     shadowColor: "#000",
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.08,
     shadowRadius: 6,
-    elevation: 2,
+    elevation: 3,
   },
-  sectionTitle: { fontSize: 16, fontWeight: "800", marginBottom: 10 },
 
-  label: { fontSize: 12, color: "#6b7280", marginBottom: 6 },
-  row: { flexDirection: "row", gap: 10, alignItems: "center" },
+  // --- Section Header ---
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "black", // aqua accent
+    marginBottom: 14,
+    textAlign: "center",
+  },
+
+  label: {
+    fontSize: 13,
+    color: "#666",
+    marginBottom: 8,
+  },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
 
   input: {
     flex: 1,
     height: 44,
     borderRadius: 10,
     paddingHorizontal: 12,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: "#fef6f9",
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: "#f4a6b8",
+    fontSize: 15,
+    color: "#333",
   },
 
-  metaRow: { marginTop: 12, gap: 4 },
-  meta: { fontSize: 12, color: "#6b7280" },
-  metaStrong: { color: "#111827", fontWeight: "800" },
-
-  primaryBtn: {
-    backgroundColor: "#3B4CCA",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+  // --- Buttons ---
+  btn: {
+    paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 10,
   },
-  primaryBtnText: { color: "#fff", fontWeight: "800" },
+  primaryBtn: {
+    backgroundColor: "#ff914d", // orange
+    paddingHorizontal: 20,
+  },
+  primaryBtnText: {
+    color: "#fff",
+    fontWeight: "800",
+    fontSize: 15,
+  },
 
   neutralBtn: {
     backgroundColor: "#e5e7eb",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-    marginBottom: 8,
   },
-  neutralBtnText: { color: "#111827", fontWeight: "800" },
-
-  warnBtn: {
-    backgroundColor: "#f59e0b",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-    marginBottom: 8,
+  neutralBtnText: {
+    color: "#111827",
+    fontWeight: "800",
   },
-  warnBtnText: { color: "#111827", fontWeight: "800" },
 
-  dangerBtn: {
-    backgroundColor: "#ef4444",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
+  orangeBtn: {
+    backgroundColor: "#ff914d",
   },
-  dangerBtnText: { color: "#fff", fontWeight: "800" },
-
-  logoutBtn: {
-    backgroundColor: "#3B4CCA",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 12,
+  orangeBtnText: {
+    color: "#fff",
+    fontWeight: "800",
   },
-  logoutBtnText: { color: "#fff", fontWeight: "800" },
 
-  note: { marginTop: 8, fontSize: 12, color: "#6b7280" },
+  resetBtn: {
+    backgroundColor: "#0cc0df",
+  },
+  resetBtnText: {
+    color: "#fff",
+    fontWeight: "800",
+  },
 });
