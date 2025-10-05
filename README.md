@@ -42,7 +42,7 @@ Every step contributes toward earning points, every point brings you closer to o
 
 ---
 
-## 🔮 Future Development
+## Future Development
 
 Our MVP focuses on manual step tracking and basic pack-opening mechanics.
 Next steps include:
@@ -56,7 +56,7 @@ Next steps include:
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 ```bash
 # 1. Clone the repo
