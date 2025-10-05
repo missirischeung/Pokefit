@@ -380,7 +380,7 @@ export default function ProfileScreen() {
                     style={styles.openPackButton}
                     onPress={() => setShowBuy(true)}
                 >
-                    <Text style={styles.openPackText}>🎁 Open a Pack</Text>
+                    <Text style={styles.openPackText}>Open a Pack!</Text>
                 </TouchableOpacity>
 
                 {/* Stats */}
@@ -576,102 +576,148 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-        padding: 20,
-        backgroundColor: "#f4f4f4",
+        padding: 24,
+        backgroundColor: "#FFFFFF", // light pinky-white base
     },
+
     lastSynced: {
-        marginTop: 30,
+        marginTop: 24,
         fontSize: 12,
-        color: "#999",
+        color: "#888",
         fontStyle: "italic",
     },
-    image: { width: 140, height: 140, borderRadius: 70, marginBottom: 12 },
-    name: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
 
-    statsRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "100%",
+    image: {
+        width: 140,
+        height: 140,
+        borderRadius: 70,
+        marginBottom: 12,
+        borderWidth: 3,
+        borderColor: "#0cc0df", // aqua ring
     },
 
-    progressContainer: { width: "100%", marginBottom: 20 },
+    name: {
+        fontSize: 24,
+        fontWeight: "800",
+        color: "#333",
+        marginBottom: 16,
+    },
+
+    // --- Progress Sections ---
+    progressContainer: {
+        width: "100%",
+        marginBottom: 22,
+        alignItems: "center",
+    },
     progressLabel: {
         fontSize: 15,
         marginBottom: 6,
-        color: "#333",
+        color: "#444",
         textAlign: "center",
         fontWeight: "600",
     },
     progressBackground: {
-        width: "100%",
+        width: "90%",
         height: 14,
-        borderRadius: 7,
-        backgroundColor: "#ddd",
+        borderRadius: 8,
+        backgroundColor: "#eee",
         overflow: "hidden",
     },
-    progressFill: { height: "100%", backgroundColor: "#FFCB05" },
-    progressFillSecondary: { height: "100%", backgroundColor: "#3B4CCA" },
+    progressFill: {
+        height: "100%",
+        backgroundColor: "#0cc0df", // aqua
+        alignSelf: "flex-start",
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+        width: "0%", // 👈 fallback for initial render
+    },
+    progressFillSecondary: {
+        height: "100%",
+        backgroundColor: "#ff914d", // orange
+        alignSelf: "flex-start",
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+        width: "0%", // 👈 fallback for initial render
+    },
     packsEarned: {
         marginTop: 8,
-        fontSize: 16,
-        fontWeight: "500",
+        fontSize: 15,
+        fontWeight: "600",
         textAlign: "center",
+        color: "#ff914d",
     },
 
-    openPackButton: {
-        backgroundColor: "#3B4CCA",
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 25,
-        alignItems: "center",
-        marginTop: 6,
-        marginBottom: 24,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    openPackText: { color: "#FFFFFF", fontWeight: "700", fontSize: 16 },
-
-    // Add steps UI
+    // --- Add Steps Card ---
     addStepsCard: {
         width: "100%",
         backgroundColor: "#fff",
-        borderRadius: 12,
-        padding: 14,
-        marginBottom: 12,
+        borderRadius: 16,
+        padding: 18,
+        marginBottom: 16,
         shadowColor: "#000",
-        shadowOpacity: 0.06,
+        shadowOpacity: 0.08,
         shadowRadius: 6,
-        elevation: 2,
+        elevation: 3,
+        borderWidth: 1,
+        borderColor: "#ffd9e1", // soft pink edge
     },
-    addStepsTitle: { fontSize: 16, fontWeight: "800", marginBottom: 8 },
-    addStepsRow: { flexDirection: "row", alignItems: "center", gap: 10 },
+    addStepsTitle: {
+        fontSize: 17,
+        fontWeight: "800",
+        marginBottom: 10,
+        color: "#333",
+    },
+    addStepsRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+    },
     input: {
         flex: 1,
         height: 44,
         borderRadius: 10,
         paddingHorizontal: 12,
-        backgroundColor: "#f3f4f6",
+        backgroundColor: "#fef6f9",
         borderWidth: 1,
-        borderColor: "#e5e7eb",
+        borderColor: "#f4a6b8",
     },
     addBtn: {
-        backgroundColor: "#22c55e",
-        paddingHorizontal: 16,
+        backgroundColor: "#ff914d",
+        paddingHorizontal: 18,
         paddingVertical: 10,
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center",
     },
     addBtnText: { color: "#fff", fontWeight: "800" },
-    hint: { marginTop: 8, fontSize: 12, color: "#6b7280" },
+    hint: { marginTop: 8, fontSize: 12, color: "#777" },
 
-    // Modal
+    // --- Open Pack Button ---
+    openPackButton: {
+        backgroundColor: "#0cc0df",
+        paddingVertical: 14,
+        paddingHorizontal: 28,
+        borderRadius: 30,
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 24,
+        shadowColor: "#0cc0df",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        elevation: 6,
+    },
+    openPackText: {
+        color: "#fff",
+        fontWeight: "800",
+        fontSize: 16,
+        letterSpacing: 0.3,
+    },
+
+    // --- Modal ---
     modalOverlay: {
         flex: 1,
-        backgroundColor: "rgba(0,0,0,0.35)",
+        backgroundColor: "rgba(0,0,0,0.4)",
         alignItems: "center",
         justifyContent: "center",
         padding: 20,
@@ -680,26 +726,40 @@ const styles = StyleSheet.create({
         width: "100%",
         maxWidth: 420,
         backgroundColor: "#fff",
-        borderRadius: 14,
-        padding: 16,
+        borderRadius: 16,
+        padding: 20,
+        borderColor: "#f9c5d1",
+        borderWidth: 1,
     },
-    modalTitle: { fontSize: 18, fontWeight: "800", marginBottom: 10 },
+    modalTitle: {
+        fontSize: 19,
+        fontWeight: "800",
+        marginBottom: 10,
+        textAlign: "center",
+        color: "#ff914d",
+    },
+
+    // Chips
     packRow: {
         flexDirection: "row",
         flexWrap: "wrap",
         gap: 8,
         marginBottom: 12,
+        justifyContent: "center",
     },
     chip: {
         paddingHorizontal: 10,
         paddingVertical: 6,
         borderRadius: 999,
-        backgroundColor: "#e5e7eb",
+        backgroundColor: "#fef6f9",
+        borderWidth: 1,
+        borderColor: "#f9c5d1",
     },
-    chipActive: { backgroundColor: "#22c55e" },
-    chipText: { fontSize: 12, color: "#374151", fontWeight: "600" },
+    chipActive: { backgroundColor: "#0cc0df" },
+    chipText: { fontSize: 13, color: "#444", fontWeight: "600" },
     chipTextActive: { color: "#fff" },
 
+    // Stepper
     stepperRow: {
         marginBottom: 8,
         flexDirection: "row",
@@ -708,18 +768,20 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     stepperBtn: {
-        width: 36,
-        height: 36,
-        borderRadius: 8,
-        backgroundColor: "#e5e7eb",
+        width: 38,
+        height: 38,
+        borderRadius: 10,
+        backgroundColor: "#fff", // changed to white
         alignItems: "center",
         justifyContent: "center",
+        borderWidth: 1,
+        borderColor: "#ddd", // subtle border for contrast
     },
     stepperDisabled: { opacity: 0.5 },
     stepperText: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: "900",
-        color: "#111827",
+        color: "#0cc0df", // aqua text color fits theme better
         lineHeight: 22,
     },
     qtyLabel: {
@@ -727,12 +789,13 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 16,
         fontWeight: "700",
+        color: "#333",
     },
 
     modalCost: {
         textAlign: "center",
         fontSize: 14,
-        color: "#6b7280",
+        color: "#777",
         marginBottom: 10,
     },
     modalActions: {
@@ -745,14 +808,13 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 14,
         borderRadius: 10,
-        backgroundColor: "#e5e7eb",
     },
-    modalCancel: { backgroundColor: "#e5e7eb" },
-    modalConfirm: { backgroundColor: "#22c55e" },
+    modalCancel: { backgroundColor: "#f9c5d1" },
+    modalConfirm: { backgroundColor: "#ff914d" },
     modalBtnText: { fontWeight: "700", color: "#111827" },
     modalConfirmText: { color: "#fff" },
 
-    // Optional animated overlay (not interactive in this version)
+    // Overlay
     overlay: {
         position: "absolute",
         top: 0,
@@ -760,12 +822,11 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         backgroundColor: "rgba(0, 0, 0, 0.6)",
-        justifyContent: "center", // centers vertically
-        alignItems: "center", // centers horizontally
+        justifyContent: "center",
+        alignItems: "center",
         zIndex: 999,
-        paddingHorizontal: 20, // safe horizontal space on smaller phones
+        paddingHorizontal: 20,
     },
-
     packPopup: {
         width: "90%",
         maxWidth: 420,
@@ -779,9 +840,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 10,
         elevation: 10,
-
-        // Responsive behavior:
-        maxHeight: "80%", // ensures it doesn’t overflow smaller screens
+        maxHeight: "80%",
     },
     card: {
         width: 260,
@@ -791,18 +850,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         shadowColor: "#000",
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-        elevation: 10,
-        borderWidth: 2,
-        borderColor: "#FFD700",
-        overflow: "hidden", // 👈 prevents image spillover
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 6,
+        borderWidth: 3,
+        borderColor: "#ff914d",
+        overflow: "hidden",
     },
-
     cardImage: {
         width: 200,
         height: 280,
-        resizeMode: "contain", // 👈 keeps full image visible
+        resizeMode: "contain",
         borderRadius: 10,
         marginBottom: 10,
     },
@@ -820,13 +878,13 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     revealedImage: { width: 50, height: 50, borderRadius: 6 },
-    revealedText: { fontSize: 16, fontWeight: "600" },
+    revealedText: { fontSize: 16, fontWeight: "600", color: "#333" },
     closeButton: {
-        backgroundColor: "#3B4CCA",
+        backgroundColor: "#0cc0df",
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 20,
         marginTop: 10,
     },
-    closeButtonText: { color: "white", fontWeight: "600", fontSize: 15 },
+    closeButtonText: { color: "white", fontWeight: "700", fontSize: 15 },
 });
