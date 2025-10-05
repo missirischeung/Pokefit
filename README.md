@@ -23,14 +23,14 @@ Every step contributes toward earning points, every point brings you closer to o
 * **Supabase Auth & Database** 
 
 ### **Backend**
-* **Node.js + Express** – Lightweight REST API for health data, collections, and trainer info
-* **PostgreSQL (via Supabase)** – Secure data persistence with Row-Level Security (RLS)
-* **Supabase RLS Policies** – Enforces per-user data ownership
+* **Node.js + Express** 
+* **PostgreSQL (via Supabase)** 
+* **Supabase RLS Policies**
 
 ### **Integration**
-* **Apple HealthKit (Planned)** – To automatically sync real-world step data
-* **Expo Router** – For structured screen navigation
-
+* **Apple HealthKit (Planned)**
+* **Expo Router**
+* 
 ---
 
 ## Features
