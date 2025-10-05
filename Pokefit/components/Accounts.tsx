@@ -81,6 +81,7 @@ export default function Account({ session }: { session: Session }) {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TextInput id="Email" value={session?.user?.email} />
       </View>
+      {/* TODO: change to be for our actual database */}
       <View style={styles.verticallySpaced}>
         <TextInput
           id="Username"
