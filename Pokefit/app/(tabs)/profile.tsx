@@ -5,7 +5,7 @@ import {
     Image,
     StyleSheet,
     ScrollView,
-    Button,
+    TouchableOpacity,
     RefreshControl,
 } from "react-native";
 import React, { useState } from "react";
@@ -78,9 +78,7 @@ export default function ProfileScreen() {
             <View style={styles.progressContainer}>
                 <Text style={styles.progressLabel}>
                     {trainer.allTimeSteps % stepsPerPoint} / {stepsPerPoint}{" "}
-                    steps → Next Point (
-                    {stepsPerPoint - (trainer.allTimeSteps % stepsPerPoint)}{" "}
-                    left)
+                    steps → Next Point 
                 </Text>
 
                 <View style={styles.progressBackground}>
@@ -102,8 +100,7 @@ export default function ProfileScreen() {
             {/* 🟡 Progress Bar for Points → Next Pack */}
             <View style={styles.progressContainer}>
                 <Text style={styles.progressLabel}>
-                    {pointsIntoCurrentPack} / {packCost} points → Next Pack (
-                    {pointsRemaining} left)
+                    {pointsIntoCurrentPack} / {packCost} points → Next Pack
                 </Text>
 
                 <View style={styles.progressBackground}>
@@ -122,11 +119,14 @@ export default function ProfileScreen() {
 
             {/* "Open Pack" Button — placeholder for later */}
             {packsEarned > 0 && (
-                <Button
-                    title="Open a Pack!"
+                <TouchableOpacity
+                    style={styles.openPackButton}
                     onPress={() => alert("Pack opening coming soon! 🚀")}
-                />
+                >
+                    <Text style={styles.openPackText}>🎁 Open a Pack!</Text>
+                </TouchableOpacity>
             )}
+
             {/* Stats */}
             <View style={styles.statsRow}>
                 <StatCard label="Cards" value={trainer.cardsCollected} />
@@ -134,7 +134,7 @@ export default function ProfileScreen() {
             </View>
             <View style={styles.statsRow}>
                 <StatCard label="All-Time Steps" value={trainer.allTimeSteps} />
-                <StatCard label="Until Next Pack" value={stepsRemaining} />
+                <StatCard label="Steps For Next Pack" value={stepsRemaining} />
             </View>
         </ScrollView>
     );
@@ -199,6 +199,25 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         textAlign: "center",
+    },
+    openPackButton: {
+        backgroundColor: "#3B4CCA", // Pikachu yellow
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 25,
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 28,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5, // Android shadow
+    },
+    openPackText: {
+        color: "#FFFFFF", 
+        fontWeight: "700",
+        fontSize: 16,
     },
     stepsRemaining: {
         marginTop: 4,
