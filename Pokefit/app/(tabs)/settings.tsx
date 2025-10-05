@@ -105,7 +105,7 @@ export default function SettingsScreen() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <ScrollView style={styles.page} contentContainerStyle={styles.container}>
-        <Text style={styles.screenTitle}>⚙️ Settings</Text>
+        <Text style={styles.screenTitle}>Settings</Text>
 
         {/* --- Profile Section --- */}
         <View style={styles.card}>
@@ -175,9 +175,10 @@ const styles = StyleSheet.create({
   screenTitle: {
     fontSize: 26,
     fontWeight: "800",
-    color: "#333",
     textAlign: "center",
-    marginBottom: 24,
+    color: "#0cc0df",
+    marginBottom: 12,
+    marginTop: 32, // 👈 adds space from top
   },
 
   // --- Card Section ---
