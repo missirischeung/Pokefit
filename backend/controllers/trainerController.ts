@@ -37,14 +37,14 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 // Create a trainer given the name, age, and country in the request body
 router.post('/', async (req: Request, res: Response) => {
-  const { name, age, country } = req.body;
-  if (!name || !age || !country) {
+  const { trainerId, name, age, country } = req.body;
+  if (!trainerId || !name || !age || !country) {
     return res.status(400).send('Missing required fields');
   }
   try {
-    const newTrainer = await Trainer.createTrainer(name, age, country);
+    const newTrainer = await Trainer.createTrainer(trainerId, name, age, country);
     if (newTrainer) {
-      res.status(201).json(newTrainer);
+      res.status(200).json(newTrainer);
     } else {
       res.status(500).send('Failed to create trainer');
     }

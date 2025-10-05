@@ -23,11 +23,11 @@ export const getTrainerById = async (trainerId: string): Promise<Trainer | null>
     return trainers[0] || null;
 };
 
-export const createTrainer = async (name: string, age: number, country: string): Promise<Trainer | null> => {
+export const createTrainer = async (trainerId: string, name: string, age: number, country: string): Promise<Trainer | null> => {
     try {
         const [trainer] = await sql<Trainer[]>`
         INSERT INTO Trainer
-        VALUES (${name}, ${age}, ${country})
+        VALUES (${trainerId}, ${name}, ${age}, ${country})
         RETURNING *
         `;
         return trainer ?? null;

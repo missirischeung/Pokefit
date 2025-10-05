@@ -30,6 +30,8 @@ export default function HealthScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const fetchHealthData = async (): Promise<StepData[]> => {
+    if (!userId || userId == "") return [];
+
     try {
       const res = await fetch(`http://localhost:3000/healthData/${userId}`);
       if (!res.ok) throw new Error("Failed to fetch health data");
